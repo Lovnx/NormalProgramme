@@ -7,14 +7,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
-
 /**
- * ¼ì²â·½·¨µÄÖ´ĞĞÊ±¼ä
+ * æ£€æµ‹æ–¹æ³•çš„æ‰§è¡Œæ—¶é—´
  */
 public class MyTransformer implements ClassFileTransformer
 {
@@ -22,7 +20,7 @@ public class MyTransformer implements ClassFileTransformer
 	final static String prefix = "\nlong startTime = System.currentTimeMillis();\n";
 	final static String postfix = "\nlong endTime = System.currentTimeMillis();\n";
 
-	// ±»´¦ÀíµÄ·½·¨ÁĞ±í
+	// è¢«å¤„ç†çš„æ–¹æ³•åˆ—è¡¨
 	final static Map<String, List<String>> methodMap = new HashMap<String, List<String>>();
 
 	public MyTransformer()
@@ -44,42 +42,42 @@ public class MyTransformer implements ClassFileTransformer
 		list.add(methodName);
 	}
 
-	// ÖØĞ´´Ë·½·¨
+	// é‡å†™æ­¤æ–¹æ³•
 	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException
+							ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException
 	{
 		className = className.replace("/", ".");
 		if (methodMap.containsKey(className))
 		{
-			// ÅĞ¶Ï¼ÓÔØµÄclassµÄ°üÂ·¾¶ÊÇ²»ÊÇĞèÒª¼à¿ØµÄÀà
+			// åˆ¤æ–­åŠ è½½çš„classçš„åŒ…è·¯å¾„æ˜¯ä¸æ˜¯éœ€è¦ç›‘æ§çš„ç±»
 			CtClass ctclass = null;
 			try
 			{
-				ctclass = ClassPool.getDefault().get(className);// Ê¹ÓÃÈ«³Æ,ÓÃÓÚÈ¡µÃ×Ö½ÚÂëÀà<Ê¹ÓÃjavassist>
+				ctclass = ClassPool.getDefault().get(className);// ä½¿ç”¨å…¨ç§°,ç”¨äºå–å¾—å­—èŠ‚ç ç±»<ä½¿ç”¨javassist>
 				for (String methodName : methodMap.get(className))
 				{
 					String outputStr = "\nSystem.out.println(\"this method " + methodName
 							+ " cost:\" +(endTime - startTime) +\"ms.\");";
 
-					CtMethod ctmethod = ctclass.getDeclaredMethod(methodName);// µÃµ½Õâ·½·¨ÊµÀı
-					String newMethodName = methodName + "$old";// ĞÂ¶¨ÒåÒ»¸ö·½·¨½Ğ×ö±ÈÈçsayHello$old
-					ctmethod.setName(newMethodName);// ½«Ô­À´µÄ·½·¨Ãû×ÖĞŞ¸Ä
+					CtMethod ctmethod = ctclass.getDeclaredMethod(methodName);// å¾—åˆ°è¿™æ–¹æ³•å®ä¾‹
+					String newMethodName = methodName + "$old";// æ–°å®šä¹‰ä¸€ä¸ªæ–¹æ³•å«åšæ¯”å¦‚sayHello$old
+					ctmethod.setName(newMethodName);// å°†åŸæ¥çš„æ–¹æ³•åå­—ä¿®æ”¹
 
-					// ´´½¨ĞÂµÄ·½·¨£¬¸´ÖÆÔ­À´µÄ·½·¨£¬Ãû×ÖÎªÔ­À´µÄÃû×Ö
+					// åˆ›å»ºæ–°çš„æ–¹æ³•ï¼Œå¤åˆ¶åŸæ¥çš„æ–¹æ³•ï¼Œåå­—ä¸ºåŸæ¥çš„åå­—
 					CtMethod newMethod = CtNewMethod.copy(ctmethod, methodName, ctclass, null);
 
-					// ¹¹½¨ĞÂµÄ·½·¨Ìå
+					// æ„å»ºæ–°çš„æ–¹æ³•ä½“
 					StringBuilder bodyStr = new StringBuilder();
 					bodyStr.append("{");
 					bodyStr.append(prefix);
-					bodyStr.append(newMethodName + "($$);\n");// µ÷ÓÃÔ­ÓĞ´úÂë£¬ÀàËÆÓÚmethod();($$)±íÊ¾ËùÓĞµÄ²ÎÊı
+					bodyStr.append(newMethodName + "($$);\n");// è°ƒç”¨åŸæœ‰ä»£ç ï¼Œç±»ä¼¼äºmethod();($$)è¡¨ç¤ºæ‰€æœ‰çš„å‚æ•°
 					bodyStr.append(postfix);
 					bodyStr.append(outputStr);
 					bodyStr.append("}");
 
-					newMethod.setBody(bodyStr.toString());// Ìæ»»ĞÂ·½·¨
-					ctclass.addMethod(newMethod);// Ôö¼ÓĞÂ·½·¨
+					newMethod.setBody(bodyStr.toString());// æ›¿æ¢æ–°æ–¹æ³•
+					ctclass.addMethod(newMethod);// å¢åŠ æ–°æ–¹æ³•
 					System.err.println(outputStr);
 				}
 				return ctclass.toBytecode();

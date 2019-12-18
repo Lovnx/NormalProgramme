@@ -5,25 +5,25 @@ import java.lang.instrument.Instrumentation;
 public class pre_MyProgram
 {
 	/**
-	 * ¸Ã·½·¨ÔÚmain·½·¨Ö®Ç°ÔËĞĞ£¬Óëmain·½·¨ÔËĞĞÔÚÍ¬Ò»¸öJVMÖĞ ²¢±»Í¬Ò»¸öSystem ClassLoader×°ÔØ
-	 * ±»Í³Ò»µÄ°²È«²ßÂÔ(security policy)ºÍÉÏÏÂÎÄ(context)¹ÜÀí
+	 * è¯¥æ–¹æ³•åœ¨mainæ–¹æ³•ä¹‹å‰è¿è¡Œï¼Œä¸mainæ–¹æ³•è¿è¡Œåœ¨åŒä¸€ä¸ªJVMä¸­ å¹¶è¢«åŒä¸€ä¸ªSystem ClassLoaderè£…è½½
+	 * è¢«ç»Ÿä¸€çš„å®‰å…¨ç­–ç•¥(security policy)å’Œä¸Šä¸‹æ–‡(context)ç®¡ç†
 	 */
 	public static void premain(String agentOps, Instrumentation inst)
 	{
 
-		System.out.println("====premain ·½·¨Ö´ĞĞ");
+		System.out.println("====premain æ–¹æ³•æ‰§è¡Œ");
 		System.out.println(agentOps);
 
 	}
 
 	/**
-	 * Èç¹û²»´æÔÚ premain(String agentOps, Instrumentation inst) Ôò»áÖ´ĞĞ premain(String
+	 * å¦‚æœä¸å­˜åœ¨ premain(String agentOps, Instrumentation inst) åˆ™ä¼šæ‰§è¡Œ premain(String
 	 * agentOps)
 	 */
 	public static void premain(String agentOps)
 	{
 
-		System.out.println("====premain·½·¨Ö´ĞĞ2====");
+		System.out.println("====premainæ–¹æ³•æ‰§è¡Œ2====");
 		System.out.println(agentOps);
 	}
 

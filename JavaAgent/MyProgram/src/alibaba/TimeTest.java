@@ -5,7 +5,7 @@ public class TimeTest
 
 	public static void main(String[] args)
 	{
-		System.err.println("======TimeTestÖ´ÐÐ========");
+		System.err.println("======TimeTestæ‰§è¡Œ========");
 		sayHello();
 		sayHello2("hello world222222222");
 	}
