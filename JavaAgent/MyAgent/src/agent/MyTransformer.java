@@ -25,8 +25,8 @@ public class MyTransformer implements ClassFileTransformer
 
 	public MyTransformer()
 	{
-		add("com.shanhy.demo.TimeTest.sayHello");
-		add("com.shanhy.demo.TimeTest.sayHello2");
+		add("alibaba.TimeTest.sayHello");
+		add("alibaba.TimeTest.sayHello2");
 	}
 
 	private void add(String methodString)
